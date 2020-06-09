@@ -19,6 +19,7 @@ The launch options can be configured this way in settings.json:
 ```
 
 These settings are now selectable on the "Run view":
+
 ![Run view](image.png)
 
 The selected options are automatically saved in settings.json like:
