@@ -13,14 +13,14 @@ The launch options can be configured this way in settings.json:
 ```
 "launchOption.options": {
     "Platform": ["x86", "x64"],
-    "BuildType": ["dbg", "dev", "rel"],
+    "BuildType": [{"name": "Debug", "value": "dbg"}, "dev", {"name": "Release", "value": "rel"}],
     "LogLevel": ["verbose", "warning", "error"],
 },
 ```
 
 These settings are now selectable on the "Run view":
 
-![Run view](image.png)
+![Run view](image_v2.png)
 
 The selected options are automatically saved in settings.json like:
 ```

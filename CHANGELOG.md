@@ -1,6 +1,11 @@
 # Change Log
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## [1.0.1] - 2020-11-27
+### Added
+- Support of {"name": "Name to show in quick pick", "value": "line to place in config"}
+
+### Changed
+- Chosen element always on the top of quick pick variants list.
 
 ## [Unreleased]
 
