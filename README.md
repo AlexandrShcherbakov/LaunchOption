@@ -18,6 +18,28 @@ The launch options can be configured this way in settings.json:
 },
 ```
 
+Each option can have a filter and the option will be visible only if the filter matched to all other options.
+
+Here debug build type is available only for platform x86:
+
+```
+"launchOption.options": {
+    "Platform": ["x86", "x64"],
+    "BuildType": [
+        {
+            "name": "Debug",
+            "value": "dbg",
+            "filter": [
+                {"name":"Platform", "values": ["x86"]}
+            ]
+        },
+        "dev",
+        {"name": "Release", "value": "rel"}
+    ],
+    "LogLevel": ["verbose", "warning", "error"],
+},
+```
+
 These settings are now selectable on the "Run view":
 
 ![Run view](image_v2.png)
