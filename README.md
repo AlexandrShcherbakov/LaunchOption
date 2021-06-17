@@ -18,6 +18,8 @@ The launch options can be configured this way in settings.json:
 },
 ```
 
+Option value could be not only a string but an object or an array.
+
 Each option can have a filter and the option will be visible only if the filter matched to all other options.
 
 Here debug build type is available only for platform x86:

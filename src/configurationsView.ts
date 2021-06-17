@@ -44,7 +44,7 @@ export class ConfigViewProvider implements vscode.TreeDataProvider<ConfigOption>
 				{
 					for (let i = 0; i < values.length; ++i)
 					{
-						if (values[i].value == currentOptions[key])
+						if (values[i].value.name == currentOptions[key].name)
 						{
 							currentValue = values[i];
 						}
@@ -95,7 +95,7 @@ class OptionFilter {
 }
 
 class OptionPair {
-	constructor(public name : string, public value : string, public filters : Array<OptionFilter>) {}
+	constructor(public name : string, public value : Object, public filters : Array<OptionFilter>) {}
 }
 export class ConfigOption extends vscode.TreeItem {
 	tooltip : string;

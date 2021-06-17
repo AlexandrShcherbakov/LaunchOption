@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.2.1] - 2021-06-17
+
+### Added
+- Support of objects and arrays as value of the option.
+
 ## [1.2.0] - 2021-01-20
 ### Added
 - Support of filters based on current options.
