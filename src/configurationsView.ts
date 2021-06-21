@@ -42,9 +42,10 @@ export class ConfigViewProvider implements vscode.TreeDataProvider<ConfigOption>
 				}
 				else
 				{
+					currentValue = values[0];
 					for (let i = 0; i < values.length; ++i)
 					{
-						if (values[i].value.name == currentOptions[key].name)
+						if (values[i].value == currentOptions[key])
 						{
 							currentValue = values[i];
 						}

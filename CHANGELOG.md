@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.2.2] - 2021-06-21
+
+### Fixed
+- Problem with incorrect default values.
+
 ## [1.2.1] - 2021-06-17
 
 ### Added
