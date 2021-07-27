@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.2.3] - 2021-07-27
+
+### Fixed
+- Incorrect visualization of a chosen values on extension start.
+
 ## [1.2.2] - 2021-06-21
 
 ### Fixed

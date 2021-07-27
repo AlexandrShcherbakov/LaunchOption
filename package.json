@@ -2,7 +2,7 @@
 	"name": "launchoption",
 	"displayName": "LaunchOption",
 	"description": "This extension provides configurable options you can use in your launch configs.",
-	"version": "1.2.2",
+	"version": "1.2.3",
 	"publisher": "AlexandrShcherbakov",
 	"engines": {
 		"vscode": "^1.45.0"
