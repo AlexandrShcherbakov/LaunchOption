@@ -97,6 +97,7 @@ export class ConfigViewProvider implements vscode.TreeDataProvider<ConfigOption>
 	}
 
     getTreeItem(element: ConfigOption): vscode.TreeItem {
+		element.command = { command: 'launchOption.chooseOption', title: "Choose Option", arguments: [element, this], };
 		return element;
 	}
 
@@ -169,7 +170,7 @@ export class ConfigOption extends vscode.TreeItem {
 		return valuesToPick;
 	}
 
-    public changeConfigParam(provider: ConfigViewProvider, context: vscode.ExtensionContext) {
+    public changeConfigParam(provider: ConfigViewProvider) {
 		let valuesToPick : Array<string> = this.genValuesToPick(provider);
 		let lineValue = this.value.name == "" ? EmptyRow : this.value.name;
 		valuesToPick.splice(valuesToPick.indexOf(lineValue), 1);

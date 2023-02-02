@@ -13,11 +13,10 @@ export function activate(context: vscode.ExtensionContext) {
 	let configurationsViewProvider = new ConfigViewProvider();
 	vscode.window.registerTreeDataProvider('launchOption', configurationsViewProvider);
 
-	let treeView = vscode.window.createTreeView('launchOption', new ConfigTreeOptions(configurationsViewProvider));
-	treeView.onDidChangeSelection((evt: SelectConfigEvent) => {
-		if (evt.selection.length == 0)
-			return;
-		evt.selection[0].changeConfigParam(configurationsViewProvider, context);
+	vscode.window.createTreeView('launchOption', new ConfigTreeOptions(configurationsViewProvider));
+
+	vscode.commands.registerCommand('launchOption.chooseOption', (option: ConfigOption, provider: ConfigViewProvider) => {
+		option.changeConfigParam(provider);
 	});
 
 	vscode.workspace.onDidChangeConfiguration(event => {
