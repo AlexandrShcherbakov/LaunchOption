@@ -1,0 +1,25 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "files.exclude": {
+        "out": false // set this to true to hide the "out" folder with the compiled JS files
+    },
+    "search.exclude": {
+        "out": true // set this to false to include "out" folder in search results
+    },
+    // Turn off tsc task auto detection since we have the necessary tasks as npm scripts
+    "typescript.tsc.autoDetect": "off",
+    "launchOption.options": {
+        "Platform": ["x86", "x64"],
+        "BuildType": [
+            {"name": "Debug", "value": "dbg"},
+            "dev",
+            {"name": "Release", "value": "rel"}
+        ],
+        "LogLevel": ["verbose", "warning", "error"],
+    },
+    "launchOption.currentConfig": {
+        "Platform": "x86",
+        "BuildType": "rel",
+        "LogLevel": "warning"
+    },
+}
