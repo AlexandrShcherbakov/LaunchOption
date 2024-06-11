@@ -1,0 +1,11 @@
+{
+    // here should be "launchOption.currentConfig"
+    "launchOption.options": {
+        "Platform": ["x86", "x64"],
+        "BuildType": [
+            { "name": "Debug", "value": "dbg" },
+            { "name": "Release", "value": "rel" },
+            "dev",
+        ],
+    },
+}

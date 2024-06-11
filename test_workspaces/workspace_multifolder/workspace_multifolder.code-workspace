@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "folder1"
+		},
+		{
+			"path": "folder2"
+		}
+	],
+	"settings": {
+		// this option should prevent "launchOption.currentConfig" in the current file
+		"launchOption.store.folder": "folder2",
+
+		"launchOption.options": {
+			"Platform": ["x86", "x64"],
+			"BuildType": [
+				{ "name": "Debug", "value": "dbg" },
+				{ "name": "Release", "value": "rel" },
+				"dev",
+			],
+		},
+	}
+}
