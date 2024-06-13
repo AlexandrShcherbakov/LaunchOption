@@ -27,10 +27,21 @@
 			"title": "LaunchOptions",
 			"properties": {
 				"launchOption.currentConfig": {
-					"type": "object"
+					"type": "object",
+					"scope": "resource"
 				},
 				"launchOption.options": {
 					"type": "object"
+				},
+				"launchOption.store.folder": {
+					"type": "string"
+				},
+				"launchOption.store.global": {
+					"type": "string"
+				},
+				"launchOption.globalConfig": {
+					"type": "object",
+					"scope": "resource"
 				}
 			}
 		  }

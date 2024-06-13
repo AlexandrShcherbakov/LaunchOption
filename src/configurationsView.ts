@@ -4,6 +4,11 @@ interface LooseObject {
 	[key: string]: any
 }
 
+class StorageSettings {
+	folder?: string;
+	global?: string;
+}
+
 function equal(a:any, b:any) {
   if (a === b) return true;
 
@@ -42,6 +47,68 @@ function equal(a:any, b:any) {
   return a!==a && b!==b;
 };
 
+/// Return:
+///     [undefined, undefined] - store in workspace file (for a multi-root workspace), or in settings.json (for a simple workspace)
+///     [undefined, vscode.Uri("<path>/.vscode/settings.json")] - store in the settings of one of the folders of multi-root workspace
+///     ["someFolder", undefined] - store in global user settings
+function getSelectedOptionsStore(): readonly [string | undefined, vscode.Uri | undefined] {
+	let configStore = vscode.workspace.getConfiguration("launchOption").get<StorageSettings>("store");
+	let configFolder = configStore && configStore["folder"];
+	let configGlobal = configStore && configStore["global"];
+
+	// store config in global user settings
+	if (configGlobal) {
+		return [configGlobal, undefined];
+	}
+
+	// multi-root workspace: store config in folder settings
+	if (vscode.workspace.workspaceFolders && configFolder) {
+		for (let ws of vscode.workspace.workspaceFolders) {
+			if (ws.name === configFolder) {
+				return [undefined, ws.uri];
+			}
+		}
+	}
+
+	// store config in workspace file
+	return [undefined, undefined];
+}
+
+function getSelectedOptions(): LooseObject | undefined {
+	let [storeGlobal, storeFolder] = getSelectedOptionsStore();
+	if (storeGlobal !== undefined && storeGlobal !== "") {
+		let globalConfig = vscode.workspace.getConfiguration("launchOption").get<LooseObject>("globalConfig", {});
+
+		if (globalConfig !== undefined && storeGlobal in globalConfig) {
+			return globalConfig[storeGlobal];
+		} else {
+			return {};
+		}
+	}
+
+	return vscode.workspace.getConfiguration("launchOption", storeFolder).get<LooseObject>("currentConfig", {});
+}
+
+function setSelectedOptions(config: LooseObject | undefined) {
+	let [storeGlobal, storeFolder] = getSelectedOptionsStore();
+
+	if (storeGlobal !== undefined && storeGlobal !== "") {
+		let globalConfig = vscode.workspace.getConfiguration("launchOption").get<LooseObject>("globalConfig");
+		if (globalConfig !== undefined) {
+			globalConfig[storeGlobal] = config;
+		}
+		vscode.workspace.getConfiguration("launchOption").update("globalConfig", globalConfig, vscode.ConfigurationTarget.Global);
+		return;
+	}
+
+	if (storeFolder !== undefined) {
+		vscode.workspace.getConfiguration("launchOption", storeFolder).update("currentConfig", config, vscode.ConfigurationTarget.WorkspaceFolder);
+		return;
+	}
+
+	vscode.workspace.getConfiguration("launchOption").update("currentConfig", config, vscode.ConfigurationTarget.Workspace);
+}
+
 export class ConfigViewProvider implements vscode.TreeDataProvider<ConfigOption> {
 
 	private _onDidChangeTreeData: vscode.EventEmitter<ConfigOption | null> = new vscode.EventEmitter<ConfigOption | null>();
@@ -55,8 +122,9 @@ export class ConfigViewProvider implements vscode.TreeDataProvider<ConfigOption>
 
 	updateOptions() {
 		this.options = new Array<ConfigOption>();
+
 		let optionsList = vscode.workspace.getConfiguration("launchOption").get<Object>("options");
-		let currentOptions = vscode.workspace.getConfiguration("launchOption").get<LooseObject>("currentConfig");
+		let currentOptions = getSelectedOptions();
 		if (optionsList != undefined && currentOptions != undefined)
 		{
 			for (let [key, values] of Object.entries(optionsList))
@@ -90,9 +158,11 @@ export class ConfigViewProvider implements vscode.TreeDataProvider<ConfigOption>
 					}
 				}
 				this.options.push(new ConfigOption(key, values, currentValue));
+				currentOptions[key] = currentValue.value;
 			}
 		}
-		vscode.workspace.getConfiguration("launchOption").update("currentConfig", currentOptions, vscode.ConfigurationTarget.Workspace);
+
+		setSelectedOptions(currentOptions);
 		this._onDidChangeTreeData.fire(null);
 	}
 
@@ -171,6 +241,7 @@ export class ConfigOption extends vscode.TreeItem {
 	}
 
     public changeConfigParam(provider: ConfigViewProvider) {
+
 		let valuesToPick : Array<string> = this.genValuesToPick(provider);
 		let lineValue = this.value.name == "" ? EmptyRow : this.value.name;
 		valuesToPick.splice(valuesToPick.indexOf(lineValue), 1);
@@ -186,10 +257,10 @@ export class ConfigOption extends vscode.TreeItem {
 			provider.refresh();
 			if (vscode.workspace.workspaceFolders?.length && this.label != undefined)
 			{
-				let config = vscode.workspace.getConfiguration("launchOption").get<LooseObject>("currentConfig");
+				let config = getSelectedOptions();
 				if (config != undefined)
 					config[this.label] = this.value.value;
-				vscode.workspace.getConfiguration("launchOption").update("currentConfig", config, vscode.ConfigurationTarget.Workspace);
+				setSelectedOptions(config);
 			}
 			this.tooltip = `${this.label}-${this.value.name}`;
 			this.description = this.value.name == "" ? EmptyRow : this.value.name;

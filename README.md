@@ -68,6 +68,45 @@ And therefore can be used in a launch config like:
 },
 ```
 
+### Multi-root workspaces
+
+When working on workspaces that have multiple workspace folders it can be convenient to store the selected options not in a `*.code-workspace` file, but in some another place. For example, if `*.code-workspace` file is committed to the VCS and now it's always marked as changed. It can be stored in two other places:
+
+1) In `.vscode/settings.json` of one of the workspace's roots. To do this add an option "launchOption.store.folder" like this:
+```
+// assuming there is a folder "someFolder" in your project
+"launchOption.store.folder": "someFolder"
+
+// this way the selected options will be stored not in a `*.code-workspace`, but in `{someFolder.path}/.vscode/settings.json`
+```
+
+2) In the global user settings. To do this add an option "launchOptions.store.global" like this:
+```
+// project.code-workspace
+"launchOption.store.global": "someProject"
+
+// user settings will look like this:
+{
+    // other options here
+    "launchOption.globalConfig": {
+        "someProject": {
+            "Platform": "x64",
+            "BuildType": "dev",
+            "LogLevel": "verbose"
+        },
+
+        // options of other projects here
+    },
+}
+
+// using this method the launch config should also use global config
+{
+    // ...
+    "program": "${workspaceFolder}/build/${config:launchOption.globalConfig.someProject.Platform}/${config:launchOption.globalConfig.someProject.BuildType}/myapp.exe",
+    // ...
+},
+```
+
 -----------------------------------------------------------------------------------------------------------
 
 
